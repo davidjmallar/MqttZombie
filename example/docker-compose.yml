@@ -1,6 +1,15 @@
 version: '2'
 
 services:
+  zombie:
+    image: mqttzombie
+    container_name: zombie
+    restart: always
+    volumes:
+      - ./appsettings.json:/app/appsettings.json
+    depends_on:
+      - rabbitmq
+
   rabbitmq:
     build:
       context: .
@@ -24,7 +33,6 @@ services:
       - ACCEPT_EULA=Y
     # volumes:
     #   - ./seqdata/:/data
-    networks:
-      - revers_proxy-net
     ports:
       - 5341:5341
+      - 8000:80

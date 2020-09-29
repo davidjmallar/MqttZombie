@@ -18,5 +18,7 @@ RUN dotnet publish "MqttZombie.csproj" -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
+RUN apk --no-cache add curl
+HEALTHCHECK CMD curl --fail http://localhost/health || exit 1
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "MqttZombie.dll"]

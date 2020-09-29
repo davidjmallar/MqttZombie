@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
 using MqttZombie.Options;
@@ -19,6 +20,9 @@ namespace MqttZombie.Services
         private IMqttClientOptions _options;
         private Timer _timer;
         private readonly ILogger _logger;
+
+        public bool IsConnected { get; private set; } = false;
+
 
         public MqttClient(ILogger logger)
         {
@@ -58,20 +62,33 @@ namespace MqttZombie.Services
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await _mqttClient.ConnectAsync(_options, cancellationToken);
-            await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("#").Build());
-            if (!_mqttClient.IsConnected)
+            _mqttClient.UseDisconnectedHandler(async e =>
             {
-                await _mqttClient.ReconnectAsync();
-            }
-            _timer = new Timer(onSend, null, 0, 60000 / ServiceOptions.MqttClientSettings.Frequency);
-            _logger.Information("Client started");
+                IsConnected = false;
+                _logger.Information("Client reconnecting");
+                await Task.Delay(TimeSpan.FromSeconds(5));
+                try
+                {
+                    await _mqttClient.ConnectAsync(_options, cancellationToken); // Since 3.0.5 with CancellationToken
+                }
+                catch
+                {
+                    _logger.Information("Reconnecting failed");
+
+                }
+            });
+            _mqttClient.UseConnectedHandler(e =>
+            {
+                _logger.Information("Client connected");
+                IsConnected = true;
+                _timer = new Timer(onSend, null, 0, 60000 / ServiceOptions.MqttClientSettings.Frequency);
+            });
+            await _mqttClient.ConnectAsync(_options, cancellationToken);
 
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            await _timer.DisposeAsync();
             if (_mqttClient.IsConnected)
             {
                 await _mqttClient.DisconnectAsync(

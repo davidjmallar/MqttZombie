@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MqttZombie.HealthCheck;
 using MqttZombie.Options;
 using MqttZombie.Services;
 using Serilog;
@@ -24,12 +25,13 @@ namespace MqttZombie
             //services.AddScoped<IHostedService, MqttClient>();
             //services.AddHostedService<MqttClient>();
             services.AddSingleton(Log.Logger);
-            services.AddHostedService<MqttClientFactory>();
+            services.AddHostedService<ClientConnectorHostedService>();
+            services.AddSingleton<MqttClientFactory>();
             services.AddControllers();
-
+            services.AddHealthChecks();
+            services.AddHealthChecks()
+                .AddCheck<ClientHealthCheck>("mqtt_connection_health_check");
             ServiceOptions.Setup(Configuration);
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +49,7 @@ namespace MqttZombie
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }

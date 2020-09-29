@@ -1,40 +1,19 @@
-﻿using Microsoft.Extensions.Hosting;
-using MqttZombie.Options;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.IO.Pipes;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MqttZombie.Services
 {
-    public class MqttClientFactory : IHostedService
+    public class MqttClientFactory
     {
-        private readonly ILogger _logger;
-        private List<MqttClient> _clients;
+        public List<MqttClient> Clients = new List<MqttClient>();
 
-        public MqttClientFactory(ILogger logger)
+        public MqttClientFactory()
         {
-            _logger = logger;
         }
-        public Task StartAsync(CancellationToken cancellationToken)
+        
+        public bool AnyClientDisconnected()
         {
-
-            _clients = new List<MqttClient>();
-            for (int i = 0; i < ServiceOptions.MqttClientSettings.TotalClients; i++)
-            {
-                _clients.Add(new MqttClient(_logger));
-            }
-            _clients.AsParallel().ForAll(c => Task.Run(()=>c.StartAsync(CancellationToken.None)));
-            return Task.CompletedTask;
+            return Clients.Exists(x => x.IsConnected == false);
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            _clients.AsParallel().ForAll(c => Task.Run(() => c.StopAsync(CancellationToken.None)));
-            return Task.CompletedTask;
-        }
     }
 }

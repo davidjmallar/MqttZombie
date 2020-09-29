@@ -6,24 +6,7 @@ Highly configurable Mqtt stresstester service with random data generation functi
   <img width="200" src="header.png">
 </p>
 
-## Use
 
-From this repo:
-
-```sh
-// setup rabbitmq based mqtt environment
-docker build src/MqttZombie/MqttZombie/Dockerfile . --tag MqttZombie
-```
-
-From Docker repository:
-
-```sh
-docker pull MqttZombie
-```
-
-## Usage example
-
-You can start this mqtt zombie to use N independent connection to the broker. These independent zombie clients send randomly generated template based payloads to topics.
 
 ## Settings
 
@@ -152,6 +135,10 @@ In the log you can see what payload the example setup generates:
 <p align="center">
   <img src="examplelog.png">
 </p>
+
+## Api
+
+You can only do health check on the api at the _/health_ endpoint on the port _80_
 
 
 ## Meta
