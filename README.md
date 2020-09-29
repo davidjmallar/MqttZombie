@@ -5,7 +5,7 @@ Highly configurable Mqtt stresstester service with random data generation functi
 ![Continous integration](https://github.com/davidjmallar/MqttZombie/workflows/Continous%20integration/badge.svg?branch=master)
 
 <p align="center">
-  <img width="200" src="header.png">
+  <img width="40%" src="docs/header.png">
 </p>
 
 ## [Docker](https://hub.docker.com/r/mallar/mqtt-zombie) example
@@ -158,9 +158,8 @@ You can run the example by:
 In the log you can see what payload the example setup generates:
 
 <p align="center">
-  <img src="examplelog.png">
+  <img src="docs/examplelog.png">
 </p>
-
 
 ## Api
 
