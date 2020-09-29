@@ -2,8 +2,8 @@ version: '2'
 
 services:
   zombie:
-    image: mqttzombie
-    container_name: zombie
+    image: mallar/mqtt-zombie
+    container_name: mqtt-zombie
     restart: always
     volumes:
       - ./appsettings.json:/app/appsettings.json

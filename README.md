@@ -2,9 +2,22 @@
 
 Highly configurable Mqtt stresstester service with random data generation functionality 
 
+![Continous integration](https://github.com/davidjmallar/MqttZombie/workflows/Continous%20integration/badge.svg?branch=master)
+
 <p align="center">
   <img width="200" src="header.png">
 </p>
+
+## [Docker example](https://hub.docker.com/r/mallar/mqtt-zombie)
+
+```yaml
+zombie:
+  image: mallar/mqtt-zombie
+  container_name: mqtt-zombie
+  restart: always
+  volumes:
+    - ./appsettings.json:/app/appsettings.json
+```
 
 
 
@@ -12,7 +25,7 @@ Highly configurable Mqtt stresstester service with random data generation functi
 
 When running the image, best practice to volume in the appsettings.json
 
->Example:
+Example _appsettings.json_:
 
 ```json
 {
