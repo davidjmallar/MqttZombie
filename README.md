@@ -8,7 +8,7 @@ Highly configurable Mqtt stresstester service with random data generation functi
   <img width="200" src="header.png">
 </p>
 
-## [Docker example](https://hub.docker.com/r/mallar/mqtt-zombie)
+## [Docker](https://hub.docker.com/r/mallar/mqtt-zombie) example
 
 ```yaml
 zombie:
@@ -19,7 +19,9 @@ zombie:
     - ./appsettings.json:/app/appsettings.json
 ```
 
-
+<p align="center">
+  <img width="100%" src="docs/diagram.svg">
+</p>
 
 ## Settings
 
