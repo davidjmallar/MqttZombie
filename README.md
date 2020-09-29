@@ -166,6 +166,13 @@ In the log you can see what payload the example setup generates:
 - Health Check - You can do health check on the api at the _/health_ endpoint on the port _80_
 - Prometheus metrics - You can receive some basic prometheus metrics about the service on the port "80 /metrics" endpoint
 
+## Todos / future features
+
+- Handle date variables
+- Planned stop functionality - Stop container after X sendings or Y seconds
+- Validation for json payload - The main usecase to send json
+- Testing - At least UI tests in the project, in the CI
+
 ## Meta
 
 David J. Mallar – [Linkedin](https://www.linkedin.com/in/david-j-mallar/) – mallar.david@gmail.com
