@@ -5,7 +5,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
 
-ENV MSBUILDSINGLELOADCONTEXT=1
+# ENV MSBUILDSINGLELOADCONTEXT=1
 
 COPY . .
 RUN dotnet restore "MqttZombie.csproj" --ignore-failed-sources

@@ -32,7 +32,7 @@ jobs:
           tags: mallar/mqtt-zombie:latest
           context: ./src/MqttZombie/MqttZombie/
           file: ./src/MqttZombie/MqttZombie/Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/386
+          platforms: linux/amd64
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
