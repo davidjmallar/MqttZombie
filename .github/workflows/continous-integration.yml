@@ -27,8 +27,8 @@ jobs:
         with:
           push: false
           tags: mallar/mqtt-zombie:latest
-          context: ./src/MqttZombie/MqttZombie/
-          file: ./Dockerfile
+          context: ./src/MqttZombie/MqttZombie
+          file: Dockerfile
           platforms: linux/amd64,linux/arm64,linux/386
       -
         name: Image digest
