@@ -8,9 +8,10 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:  
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
+      - run: |
+          git fetch origin +refs/heads/*:refs/remotes/origin/* --unshallow --tags
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.4
