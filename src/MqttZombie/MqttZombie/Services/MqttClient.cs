@@ -5,6 +5,7 @@ using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
 using MqttZombie.Options;
+using Prometheus;
 using Serilog;
 using System;
 using System.Text;
@@ -20,9 +21,13 @@ namespace MqttZombie.Services
         private IMqttClientOptions _options;
         private Timer _timer;
         private readonly ILogger _logger;
-
+        private static readonly Counter _totalClientPublishes = Metrics.CreateCounter("client_publishes_total", "Total mqtt publishes from zombie clients");
+        private static readonly Counter _total_reconnections = Metrics.CreateCounter("reconnections_total", "Total reconnections to mqtt broker");
+        private static readonly Counter _clientPublishes = Metrics.CreateCounter("client_publishes", "Mqtt publishes count per zombie client", new CounterConfiguration()
+        {
+            LabelNames = new[] { "client_id" }
+        });
         public bool IsConnected { get; private set; } = false;
-
 
         public MqttClient(ILogger logger)
         {
@@ -49,15 +54,20 @@ namespace MqttZombie.Services
         {
             var topic = ServiceOptions.MqttClientSettings.Topic.ProcessTemplate(ServiceOptions.TemplateVariables.Variables, _clientId);
             var payload = ServiceOptions.MqttClientSettings.Payload.ProcessTemplate(ServiceOptions.TemplateVariables.Variables, _clientId);
-            var message = new MqttApplicationMessageBuilder()
+            var messagebuilder = new MqttApplicationMessageBuilder()
                     .WithTopic(topic)
-                    .WithPayload(payload)
-                    //.WithExactlyOnceQoS()
-                    //.WithRetainFlag()
-                    .Build();
-            _logger.Verbose($"Zombie publishing {payload} to {topic}");
+                    .WithPayload(payload);
 
-            Task.Run(() => _mqttClient.PublishAsync(message, CancellationToken.None)); // Since 3.0.5 with CancellationToken
+            if (ServiceOptions.MqttClientSettings.Qos == 1) messagebuilder.WithAtLeastOnceQoS();
+            else if (ServiceOptions.MqttClientSettings.Qos == 2) messagebuilder.WithExactlyOnceQoS();
+            else messagebuilder.WithAtMostOnceQoS();
+
+            var message = messagebuilder.Build();
+            
+            _logger.Debug($"Zombie publishing {payload} to {topic}");
+            _totalClientPublishes.Inc();
+            _clientPublishes.WithLabels(_clientId).Inc();
+            Task.Run(() => _mqttClient.PublishAsync(message, CancellationToken.None));
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -66,6 +76,7 @@ namespace MqttZombie.Services
             {
                 IsConnected = false;
                 _logger.Information("Client reconnecting");
+                _total_reconnections.Inc();
                 await Task.Delay(TimeSpan.FromSeconds(5));
                 try
                 {

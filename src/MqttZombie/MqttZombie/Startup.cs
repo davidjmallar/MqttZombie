@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using MqttZombie.HealthCheck;
 using MqttZombie.Options;
 using MqttZombie.Services;
+using Prometheus;
 using Serilog;
 
 namespace MqttZombie
@@ -43,7 +44,7 @@ namespace MqttZombie
             }
 
             app.UseRouting();
-
+            app.UseHttpMetrics();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

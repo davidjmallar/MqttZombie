@@ -129,6 +129,16 @@ Every variable can have an optional _ClientRandom_ parameter, what means, that v
     "ClientRandom": true
 }
 ```
+You can run the example by:
+```
+// Build image locally
+// Run in ./src/MqttZombie/MqttZombie
+> docker build . --tag mqttzombie
+
+// Start compose with infrastructure
+// Run in the ./example folder
+> docker-compose up
+```
 
 In the log you can see what payload the example setup generates:
 
@@ -136,10 +146,11 @@ In the log you can see what payload the example setup generates:
   <img src="examplelog.png">
 </p>
 
+
 ## Api
 
-You can only do health check on the api at the _/health_ endpoint on the port _80_
-
+- Health Check - You can do health check on the api at the _/health_ endpoint on the port _80_
+- Prometheus metrics - You can receive some basic prometheus metrics about the service on the port "80 /metrics" endpoint
 
 ## Meta
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace MqttZombie.Services
 {
@@ -14,6 +15,9 @@ namespace MqttZombie.Services
         {
             return Clients.Exists(x => x.IsConnected == false);
         }
-
+        public int ConnectedClientsCount()
+        {
+            return Clients.Count(x => x.IsConnected == true);
+        }
     }
 }
