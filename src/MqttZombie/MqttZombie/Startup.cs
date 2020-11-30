@@ -29,7 +29,6 @@ namespace MqttZombie
             services.AddHostedService<ClientConnectorHostedService>();
             services.AddSingleton<MqttClientFactory>();
             services.AddControllers();
-            services.AddHealthChecks();
             services.AddHealthChecks()
                 .AddCheck<ClientHealthCheck>("mqtt_connection_health_check");
             ServiceOptions.Setup(Configuration);

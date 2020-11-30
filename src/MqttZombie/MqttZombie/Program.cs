@@ -16,6 +16,7 @@ namespace MqttZombie
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
                 .Build();
 
             Enum.TryParse(configuration.GetValue<string>("Logging:Console:Level") ?? "Information", out Serilog.Events.LogEventLevel consoleLevel);

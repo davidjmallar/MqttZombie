@@ -9,7 +9,9 @@ namespace System
         {
             foreach (var template in templateVariables)
             {
-                input = input.Replace($"{{{{{template.Name}}}}}", template.GetTemplateValue(clientId));
+                input = input
+                    .Replace($"{{{{{template.Name}}}}}", template.GetTemplateValue(clientId))
+                    .Replace($"__{template.Name}__", template.GetTemplateValue(clientId));
             }
             return input;
         }
