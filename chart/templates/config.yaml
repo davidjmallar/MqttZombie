@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "webapi.name" . }}conf
+  labels:
+    app: {{ include "webapi.name" . }}
+    chart: {{ include "webapi.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+data:
+  appsettings.json: |
+    {
+      "Logging": {
+        "Console": {
+          "Level": "Information"
+        },
+        "Seq": {
+          "Level": "Verbose",
+          "Host": "http://seq:5341"
+        }
+      },
+      "MqttBrokerSettings": {
+        "Host": "rabbitmq",
+        "Port": 1883,
+        "Tls": false,
+        "User": "guest",
+        "Password": "guest"
+      },
+      "MqttClientSettings": {
+        "TotalClients": 3,
+        "Frequency": 30,
+        "Payload": "CLIENT_ID: __CLIENT_ID__, RANDOM_FLOAT: __RANDOM_FLOAT__, RANDOM_INT: __RANDOM_INT__, RANDOM_BOOL:__RANDOM_BOOL__",
+        "Topic": "test-topic",
+        "Retain": false,
+        "Qos": 0
+      },
+      "TemplateVariables": {
+        "Variables": [
+          {
+            "Name": "CLIENT_ID",
+            "ClientRandom": true
+          },
+          {
+            "Name": "RANDOM_FLOAT",
+            "Min": 0.0,
+            "Max": 10.5
+          },
+          {
+            "Name": "RANDOM_INT",
+            "Min": -1000,
+            "Max": 1000
+          },
+          {
+            "Name": "RANDOM_BOOL",
+            "Min": false,
+            "Max": true
+          }
+        ]
+      }
+    }

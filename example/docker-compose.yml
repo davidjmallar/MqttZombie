@@ -25,7 +25,6 @@ services:
     ports:
       - 1883:1883 # mqtt
       - 15672:15672 # ui
-
   seq:
     image: datalust/seq:latest
     restart: always
