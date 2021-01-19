@@ -50,7 +50,7 @@ Example _appsettings.json_:
   "MqttClientSettings": {
     "TotalClients": 3,
     "Frequency": 30,
-    "Payload": "CLIENT_ID: {{CLIENT_ID}}, RANDOM_FLOAT: {{RANDOM_FLOAT}}, RANDOM_INT: {{RANDOM_INT}}, RANDOM_BOOL:{{RANDOM_BOOL}}",
+    "Payload": "CLIENT_ID: __CLIENT_ID__, RANDOM_FLOAT: __RANDOM_FLOAT__, RANDOM_INT: __RANDOM_INT__, RANDOM_BOOL:__RANDOM_BOOL__",
     "Topic": "test-topic",
     "Retain": false,
     "Qos": 0
@@ -95,8 +95,8 @@ Example _appsettings.json_:
 |MqttBrokerSettings:Password|guest|Password for mqtt broker|
 |MqttClientSettings:TotalClients|1|How many zombi client will start when the service is up.|
 |MqttClientSettings:Frequency|60|Frequency of sendings (msg/min/client).|
-|MqttClientSettings:Payload|""|Any payload text, It could contains variables like {{VARIABLE}} and it will changed dynamically during the sending |
-|MqttClientSettings:Topic|""|Any topic text, It could contains variables like {{VARIABLE}} and it will changed dynamically during the sending |
+|MqttClientSettings:Payload|""|Any payload text, It could contains variables like {{VARIABLE}} or \_\_ Variable\_\_ and it will changed dynamically during the sending |
+|MqttClientSettings:Topic|""|Any topic text, It could contains variables like {{VARIABLE}} or \_\_Variable\_\_ and it will changed dynamically during the sending |
 |MqttClientSettings:Retain|false| Message retain |
 |MqttClientSettings:Qos|false| Message Qos level |
 |TemplateVariables|| See below |
